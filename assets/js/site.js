@@ -45,9 +45,13 @@
     });
   });
 
-  // Reveal-on-scroll
+  // Reveal-on-scroll with safety fallback
+  const revealEls = document.querySelectorAll('[data-animate], .svc-card, .review-card');
   const io = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); } });
-  }, { threshold: 0.15 });
-  document.querySelectorAll('[data-animate], .svc-card, .review-card').forEach(el => io.observe(el));
+  }, { threshold: 0.05, rootMargin: '0px 0px -10% 0px' });
+  revealEls.forEach(el => io.observe(el));
+  // Fallback: any element still hidden after 1.8s gets revealed unconditionally
+  // (covers headless screenshots, prefers-reduced-motion, broken JS environments)
+  setTimeout(() => revealEls.forEach(el => el.classList.add('is-visible')), 1800);
 })();
