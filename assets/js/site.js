@@ -45,6 +45,27 @@
     });
   });
 
+  // Hero video: programmatic autoplay attempt (iOS Low Power, Data Saver, etc.)
+  // If play() rejects, the CSS background poster on .hero remains visible.
+  const heroVideo = document.getElementById('heroVideo');
+  if (heroVideo) {
+    const tryPlay = () => {
+      const p = heroVideo.play();
+      if (p && typeof p.catch === 'function') {
+        p.catch(() => {
+          // Autoplay blocked. Hide the video element so the poster bg shows cleanly.
+          heroVideo.style.display = 'none';
+        });
+      }
+    };
+    if (heroVideo.readyState >= 2) tryPlay();
+    else heroVideo.addEventListener('loadeddata', tryPlay, { once: true });
+    // Save data: if user has prefers-reduced-motion, skip the video entirely.
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      heroVideo.style.display = 'none';
+    }
+  }
+
   // Reveal-on-scroll with safety fallback
   const revealEls = document.querySelectorAll('[data-animate], .svc-card, .review-card');
   const io = new IntersectionObserver(entries => {

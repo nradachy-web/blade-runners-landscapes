@@ -125,9 +125,9 @@
     </nav>
   </div>
 
-  <!-- Hero with video -->
+  <!-- Hero with video (poster image is the CSS bg fallback if autoplay fails) -->
   <section class="hero">
-    <video class="hero__video" autoplay muted loop playsinline poster="assets/images/home-hero.jpg">
+    <video class="hero__video" id="heroVideo" autoplay muted loop playsinline preload="auto" poster="assets/images/home-hero.jpg" aria-hidden="true">
       <source src="assets/videos/hero.mp4" type="video/mp4">
     </video>
     <div class="hero__overlay"></div>
